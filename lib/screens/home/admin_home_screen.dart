@@ -25,6 +25,15 @@ class AdminHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _loadData();
+    controller.scrollController.addListener(() {
+      if (controller.scrollController.position.maxScrollExtent ==
+          controller.scrollController.position.pixels) {
+        if (!controller.isLoadMore) {
+          controller.isLoadMore = !controller.isLoadMore;
+          controller.fetchUser(currentPage: controller.currentpage++);
+        }
+      }
+    });
     return Scaffold(
       appBar: AppBar(
         title: const Text('ADMIN'),
@@ -61,9 +70,10 @@ class AdminHomeScreen extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: ListView.builder(
-                  itemCount: controller.userList.length,
+                  controller: controller.scrollController,
+                  itemCount: controller.userPerPage.length,
                   itemBuilder: (BuildContext context, int index) {
-                    UserModel user = controller.userList[index];
+                    UserModel user = controller.userPerPage[index];
                     return GestureDetector(
                       child: Container(
                           margin: const EdgeInsets.only(bottom: 10),

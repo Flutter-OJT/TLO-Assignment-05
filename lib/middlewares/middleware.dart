@@ -7,7 +7,9 @@ class GlobalMiddleware extends GetMiddleware {
 
   @override
   RouteSettings? redirect(String? route) {
-    return authService.authenticated || route == '/login'
+    return authService.authenticated ||
+            route == '/login' ||
+            route == '/register'
         ? null
         : const RouteSettings(name: '/login');
   }
